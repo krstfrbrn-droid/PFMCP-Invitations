@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Foundation Track 2026 — Performance Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:        #BE1725;
+      --blue:       #167EBF;
+      --yellow:     #F2CB04;
+      --dark-red:   #69120B;
+      --light-blue: #9DD4E1;
+      --lt-yellow:  #FBE5A1;
+      --gray:       #DFDFDF;
+      --mid-gray:   #7F7F80;
+      --off-white:  #F7F8FA;
+      --black:      #1A1A1A;
+    }
+    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #e2e5e9;
+      font-family: 'Lato', sans-serif;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+    .shell {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.14);
+    }
+
+    /* TRI BAR */
+    .tri-bar { display: flex; height: 7px; }
+    .tri-bar span { flex: 1; }
+    .tri-bar span:nth-child(1) { background: var(--red); }
+    .tri-bar span:nth-child(2) { background: var(--yellow); }
+    .tri-bar span:nth-child(3) { background: var(--blue); }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(130deg, #0c3f62 0%, var(--blue) 55%, #1e9ae0 100%);
+      padding: 28px 36px 24px;
+      display: flex; align-items: center; gap: 18px;
+      position: relative; overflow: hidden;
+    }
+    .header::after {
+      content:''; position:absolute; right:-40px; top:-40px;
+      width:200px; height:200px; border-radius:50%;
+      background:rgba(255,255,255,0.04);
+    }
+    .header::before {
+      content:''; position:absolute; right:50px; bottom:-60px;
+      width:140px; height:140px; border-radius:50%;
+      background:rgba(242,203,4,0.08);
+    }
+    .logo-svg { flex-shrink:0; width:56px; height:56px; position:relative; z-index:1; }
+    .header-copy { position:relative; z-index:1; }
+    .header-copy h1 {
+      font-weight:900; font-size:20px; color:#fff;
+      letter-spacing:0.05em; text-transform:uppercase; line-height:1.2;
+    }
+    .header-copy p {
+      font-family:'Source Serif 4',serif; font-size:12.5px;
+      color:rgba(255,255,255,0.7); margin-top:5px; letter-spacing:0.04em;
+    }
+
+    /* HERO BAND */
+    .hero-band {
+      background:var(--dark-red); padding:14px 36px;
+      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    }
+    .hero-pill {
+      background:var(--yellow); color:var(--black);
+      font-weight:900; font-size:10.5px; letter-spacing:0.12em;
+      text-transform:uppercase; padding:5px 12px; border-radius:2px; white-space:nowrap;
+    }
+    .hero-band p {
+      font-family:'Source Serif 4',serif; font-size:13.5px;
+      color:rgba(255,255,255,0.88); font-style:italic;
+    }
+    .hero-band p strong { color:#fff; font-style:normal; }
+
+    /* STICKY TOC */
+    .toc-nav {
+      position:sticky; top:0; z-index:100;
+      background:var(--black); padding:0 24px;
+      display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
+      box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    }
+    .toc-nav::-webkit-scrollbar { display:none; }
+    .toc-link {
+      display:flex; align-items:center; gap:6px;
+      padding:11px 12px; color:rgba(255,255,255,0.48);
+      text-decoration:none; font-size:10.5px; font-weight:700;
+      letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap;
+      border-bottom:3px solid transparent;
+      transition:color .2s, border-color .2s;
+    }
+    .toc-link:hover  { color:var(--yellow); border-color:var(--yellow); }
+    .toc-link.active { color:#fff; border-color:var(--blue); }
+    .toc-chip {
+      background:rgba(255,255,255,0.1); border-radius:3px;
+      padding:1px 5px; font-size:9px;
+    }
+
+    /* GREETING */
+    .greeting-section { padding:28px 36px 0; }
+    .greet-tag {
+      display:inline-block; background:var(--lt-yellow); color:var(--dark-red);
+      font-weight:700; font-size:10.5px; letter-spacing:0.14em;
+      text-transform:uppercase; padding:4px 10px; border-radius:2px; margin-bottom:14px;
+    }
+    .org-name { font-size:14px; font-weight:700; color:var(--blue); line-height:1.5; }
+    .org-name em { font-weight:400; font-style:italic; color:var(--mid-gray); font-size:12px; }
+    .intro-p {
+      font-family:'Source Serif 4',serif; font-size:14.5px;
+      line-height:1.8; color:#333; margin:14px 0;
+    }
+    .intro-p strong { color:var(--black); font-weight:600; }
+
+    /* REPORT CARDS */
+    .report-cards { display:flex; gap:12px; margin:18px 0; flex-wrap:wrap; }
+    .report-card {
+      flex:1; min-width:200px;
+      background:linear-gradient(135deg,#0c3f62,var(--blue));
+      border-radius:8px; padding:16px 18px; text-decoration:none;
+      display:flex; align-items:center; gap:12px;
+      transition:transform .2s, box-shadow .2s;
+      box-shadow:0 2px 8px rgba(22,126,191,.25);
+    }
+    .report-card:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(22,126,191,.4); }
+    .card-icon { font-size:24px; flex-shrink:0; }
+    .card-label { font-weight:900; font-size:13px; color:#fff; letter-spacing:0.03em; }
+    .card-sub { font-size:11px; color:rgba(255,255,255,.6); margin-top:2px; font-family:'Source Serif 4',serif; }
+
+    /* ALERT */
+    .alert-box {
+      background:#fff5f5; border:1.5px solid #f5c6c9;
+      border-left:4px solid var(--red); border-radius:0 6px 6px 0;
+      padding:14px 18px; margin:18px 0;
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .aico { font-size:20px; flex-shrink:0; line-height:1.4; }
+    .alert-box p { font-family:'Source Serif 4',serif; font-size:13.5px; line-height:1.7; color:#333; }
+    .alert-box p strong { color:var(--red); }
+    .alert-box p u { text-decoration-color:var(--red); }
+
+    /* CONGRATS */
+    .congrats {
+      background:linear-gradient(135deg,#0c3f62 0%,var(--blue) 100%);
+      border-radius:10px; padding:22px 24px; margin:18px 0; color:#fff;
+    }
+    .congrats h2 {
+      font-weight:900; font-size:16px; text-transform:uppercase;
+      letter-spacing:0.06em; margin-bottom:10px;
+    }
+    .congrats h2 em { color:var(--yellow); font-style:normal; }
+    .congrats p { font-family:'Source Serif 4',serif; font-size:13.5px; line-height:1.75; color:rgba(255,255,255,.88); }
+    .congrats p strong { color:#fff; }
+
+    .divider { height:1px; background:linear-gradient(to right,transparent,#dde3e8,transparent); margin:12px 0 20px; }
+
+    /* SECTION BLOCKS */
+    .section-block { border-bottom:1px solid #eef0f3; scroll-margin-top:48px; }
+
+    .sec-trigger {
+      width:100%; background:none; border:none; cursor:pointer;
+      display:flex; align-items:center; gap:14px; padding:20px 36px;
+      text-align:left; transition:background .15s;
+    }
+    .sec-trigger:hover { background:var(--off-white); }
+    .sec-trigger[aria-expanded="true"] { background:var(--off-white); }
+
+    .sec-icon {
+      width:38px; height:38px; border-radius:9px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; flex-shrink:0;
+    }
+    .ic-blue   { background:#e4f1fb; }
+    .ic-yellow { background:#fef9e3; }
+    .ic-green  { background:#e5f5ee; }
+    .ic-red    { background:#fce8ea; }
+    .ic-purple { background:#eeebf8; }
+    .ic-orange { background:#fdf0e6; }
+
+    .sec-label { flex:1; }
+    .sec-num {
+      font-size:10px; font-weight:900; text-transform:uppercase;
+      letter-spacing:0.12em; color:var(--mid-gray); display:block; margin-bottom:2px;
+    }
+    .sec-title { font-weight:900; font-size:15px; color:var(--black); line-height:1.2; }
+    .sec-subtitle { font-size:12px; color:var(--mid-gray); margin-top:3px; font-family:'Source Serif 4',serif; font-style:italic; }
+
+    .chevron {
+      width:24px; height:24px; border-radius:50%;
+      background:var(--gray); display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:transform .25s, background .2s;
+      font-size:12px; color:var(--mid-gray);
+    }
+    .sec-trigger[aria-expanded="true"] .chevron {
+      transform:rotate(180deg); background:var(--blue); color:#fff;
+    }
+
+    .sec-panel { overflow:hidden; max-height:0; transition:max-height .38s cubic-bezier(.4,0,.2,1); }
+    .sec-panel.open { max-height:5000px; }
+    .sec-body { padding:4px 36px 28px; }
+
+    /* BODY TEXT */
+    .body-p { font-family:'Source Serif 4',serif; font-size:14px; line-height:1.8; color:#333; margin-bottom:12px; }
+    .body-p strong { color:var(--black); font-weight:600; }
+
+    /* TRACK LIST */
+    .track-list { list-style:none; margin:10px 0 14px; }
+    .track-list > li {
+      display:flex; gap:10px; align-items:flex-start; padding:9px 0;
+      border-bottom:1px solid #f2f2f2;
+      font-family:'Source Serif 4',serif; font-size:14px; color:#333;
+    }
+    .bullet {
+      width:22px; height:22px; border-radius:50%; background:var(--blue); color:#fff;
+      font-weight:900; font-size:11px; display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; margin-top:2px;
+    }
+    .track-list > li strong { color:var(--black); }
+    .sub-track { list-style:none; margin-top:8px; padding-left:4px; }
+    .sub-track li {
+      font-size:13px; font-style:italic; color:#555;
+      padding:4px 0 4px 18px; position:relative;
+    }
+    .sub-track li::before {
+      content:''; position:absolute; left:4px; top:50%; transform:translateY(-50%);
+      width:5px; height:5px; border-radius:50%; background:var(--yellow);
+    }
+
+    /* QUAL LIST */
+    .qual-list { list-style:none; margin:10px 0 14px; }
+    .qual-list li {
+      display:flex; gap:10px; align-items:flex-start; padding:8px 0;
+      border-bottom:1px solid #f4f4f4;
+      font-family:'Source Serif 4',serif; font-size:14px; color:#333;
+    }
+    .qdot { color:var(--red); font-size:16px; line-height:1.3; flex-shrink:0; }
+
+    /* TERMS LIST */
+    .terms-list { list-style:none; margin:10px 0 14px; counter-reset:tc; }
+    .terms-list li {
+      counter-increment:tc; display:flex; gap:12px; align-items:flex-start;
+      padding:9px 0; border-bottom:1px solid #f2f2f2;
+      font-family:'Source Serif 4',serif; font-size:14px; color:#333;
+    }
+    .terms-list li::before {
+      content:counter(tc); font-weight:900; font-family:'Lato',sans-serif;
+      font-size:11px; color:#fff; background:var(--blue);
+      width:22px; height:22px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; margin-top:2px;
+    }
+
+    /* ENROLLMENT */
+    .enroll-card {
+      background:var(--off-white); border:1px solid #dde6ef;
+      border-radius:8px; padding:16px 20px; margin-bottom:12px;
+    }
+    .enroll-card p {
+      font-family:'Source Serif 4',serif; font-size:14px;
+      line-height:1.75; color:#333; margin-bottom:10px;
+    }
+    .enroll-card p:last-child { margin-bottom:0; }
+    .enroll-card strong { color:var(--black); }
+    .email-chip {
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--blue); color:#fff; font-weight:700; font-size:12.5px;
+      padding:6px 14px; border-radius:4px; text-decoration:none; margin-top:6px;
+    }
+    .nominee-note {
+      background:#fffbec; border:1px solid #f0dc8a; border-radius:6px;
+      padding:14px 18px; margin:12px 0;
+      font-family:'Source Serif 4',serif; font-size:13.5px; line-height:1.7; color:#444;
+    }
+    .nominee-note strong { color:var(--dark-red); }
+
+    /* SCHEDULE */
+    .schedule-group { margin-bottom:24px; }
+    .sched-group-title { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .stripe { width:4px; height:26px; border-radius:2px; flex-shrink:0; }
+    .sched-group-title h4 {
+      font-weight:900; font-size:13px; text-transform:uppercase;
+      letter-spacing:0.07em; color:var(--black);
+    }
+    .sched-table {
+      width:100%; border-collapse:collapse; font-size:13px;
+      border-radius:6px; overflow:hidden; box-shadow:0 1px 5px rgba(0,0,0,0.07);
+    }
+    .sched-table thead tr { background:var(--blue); }
+    .sched-table thead th {
+      color:#fff; font-weight:700; font-size:11px; letter-spacing:0.07em;
+      text-transform:uppercase; padding:9px 13px; text-align:left;
+    }
+    .sched-table tbody tr:nth-child(odd)  { background:#f9fbfd; }
+    .sched-table tbody tr:nth-child(even) { background:#fff; }
+    .sched-table tbody tr:hover { background:#eef5fb; }
+    .sched-table td {
+      padding:9px 13px; color:#333; vertical-align:middle;
+      border-bottom:1px solid #eef0f2;
+      font-family:'Source Serif 4',serif;
+    }
+    .sched-table td:first-child { font-weight:600; color:var(--black); font-family:'Lato',sans-serif; }
+    .mode-badge {
+      display:inline-block; font-size:10.5px; font-weight:700;
+      letter-spacing:0.05em; text-transform:uppercase; padding:3px 8px; border-radius:3px;
+    }
+    .m-async { background:#e5f2fb; color:#0a5c8a; }
+    .m-blend { background:#e5f2fb; color:#0a5c8a; }
+    .m-f2f   { background:#fdecea; color:var(--dark-red); }
+    .fee-free { color:#1a8a4a; font-weight:700; font-family:'Lato',sans-serif; }
+    .fee-paid { color:var(--dark-red); font-weight:700; font-family:'Lato',sans-serif; font-size:12px; }
+
+    /* CLOSING */
+    .closing-wrap { padding:28px 36px 22px; }
+    .closing-quote {
+      text-align:center; font-family:'Source Serif 4',serif;
+      font-size:15px; color:var(--blue); font-style:italic; font-weight:600;
+      margin-bottom:24px; padding:18px 24px;
+      background:linear-gradient(to right,#e5f2fb,#f0f9ff,#e5f2fb); border-radius:8px;
+    }
+    .sig-regards { font-family:'Source Serif 4',serif; font-size:14px; color:#555; margin-bottom:16px; }
+    .sig-card {
+      background:var(--off-white); border-left:4px solid var(--blue);
+      border-radius:0 8px 8px 0; padding:18px 20px;
+      display:flex; gap:16px; align-items:flex-start;
+    }
+    .sig-av {
+      width:50px; height:50px; border-radius:50%;
+      background:linear-gradient(135deg,var(--blue),var(--dark-red));
+      color:#fff; font-weight:900; font-size:17px;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; letter-spacing:-1px;
+    }
+    .sig-name  { font-weight:900; font-size:14px; color:var(--blue); margin-bottom:3px; }
+    .sig-line  { font-size:12px; color:#555; line-height:1.55; }
+    .sig-em    { font-style:italic; }
+    .sig-web a { color:var(--blue); text-decoration:none; font-size:12px; font-weight:700; }
+    .sig-verse { font-size:11px; color:var(--mid-gray); font-style:italic; margin-top:4px; }
+
+    /* FOOTER */
+    .footer {
+      background:var(--black); padding:18px 36px;
+      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    .footer-brand { color:rgba(255,255,255,.5); font-size:11px; line-height:1.55; }
+    .footer-brand strong { color:rgba(255,255,255,.88); display:block; }
+    .footer-links { display:flex; gap:8px; flex-wrap:wrap; }
+    .footer-links a {
+      font-size:11px; color:rgba(255,255,255,.5); text-decoration:none;
+      padding:3px 8px; border:1px solid rgba(255,255,255,.15); border-radius:3px;
+      transition:color .2s, border-color .2s;
+    }
+    .footer-links a:hover { color:var(--yellow); border-color:var(--yellow); }
+
+    @media(max-width:520px) {
+      .header         { padding:20px 20px 18px; }
+      .hero-band      { padding:12px 20px; }
+      .toc-nav        { padding:0 10px; }
+      .sec-trigger    { padding:16px 20px; }
+      .sec-body       { padding:4px 20px 22px; }
+      .greeting-section { padding:20px 20px 0; }
+      .closing-wrap   { padding:20px 20px 18px; }
+      .footer         { padding:16px 20px; }
+      .report-cards   { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="tri-bar"><span></span><span></span><span></span></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <svg class="logo-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="10,70 26,14 42,70" fill="#167EBF" opacity="0.93"/>
+      <polygon points="22,70 38,18 54,70" fill="#F2CB04" opacity="0.93"/>
+      <polygon points="34,70 50,22 66,70" fill="#BE1725" opacity="0.93"/>
+    </svg>
+    <div class="header-copy">
+      <h1>PFM Competency Program</h1>
+      <p>Be Informed. Be Inspired. &mdash; Foundation Track 2026 Performance Report</p>
+    </div>
+  </div>
+
+  <!-- HERO BAND -->
+  <div class="hero-band">
+    <span class="hero-pill">Performance Report</span>
+    <p>Foundation Track 2026 &mdash; <strong>Class 1A &amp; Class 1B</strong></p>
+  </div>
+
+  <!-- STICKY TOC NAV -->
+  <nav class="toc-nav" id="toc" aria-label="Jump to section">
+    <a class="toc-link active" href="#sec-intro"><span class="toc-chip">✉</span>Intro</a>
+    <a class="toc-link" href="#sec-briefer"><span class="toc-chip">I</span>Briefer</a>
+    <a class="toc-link" href="#sec-tracks"><span class="toc-chip">II</span>Tracks</a>
+    <a class="toc-link" href="#sec-qual"><span class="toc-chip">III</span>Qualifications</a>
+    <a class="toc-link" href="#sec-terms"><span class="toc-chip">IV</span>Terms</a>
+    <a class="toc-link" href="#sec-enroll"><span class="toc-chip">V</span>Enrollment</a>
+    <a class="toc-link" href="#sec-sched"><span class="toc-chip">VI</span>Schedule</a>
+  </nav>
+
+  <!-- GREETING / INTRO -->
+  <div class="greeting-section" id="sec-intro">
+    <span class="greet-tag">Greetings</span>
+    <p class="org-name">
+      Budget Information and Training Service (BITS) &mdash; Capacity Development Division (CDD)<br/>
+      <em>formerly the Advocacy, Communications and Training Service (ACTS)</em>
+    </p>
+    <p class="intro-p" style="font-style:italic;color:var(--mid-gray);">Magandang araw po! Kamusta po kayo?</p>
+    <p class="intro-p">
+      Mr. Timothy Malabuyoc, facilitator of <strong>FT26-1B</strong>, and I are pleased to share the
+      <strong>Performance Report</strong> of both <strong>Class 1A</strong> and <strong>Class 1B</strong>
+      of the <strong>Foundation Track 2026</strong>. Kindly refer to the report regarding your status in the track.
+    </p>
+
+    <!-- Report Links -->
+    <div class="report-cards">
+      <a class="report-card" href="https://dbmgovph-my.sharepoint.com/:w:/g/personal/bitscdd_dbm_gov_ph/IQCrPOf_xb79R4YoAc_618vAARhsiFQCHm8F4GHd0BmyhrU?e=Fswv7J" target="_blank">
+        <div class="card-icon">📄</div>
+        <div>
+          <div class="card-label">Class 1A Performance Report</div>
+          <div class="card-sub">Click to open document ↗</div>
+        </div>
+      </a>
+      <a class="report-card" href="https://dbmgovph-my.sharepoint.com/:w:/g/personal/bitscdd_dbm_gov_ph/IQBsWQb3paH7Qqq7Jc7g9ZrlAWok5SJeoLjEUPLB_zaiPSQ?e=0PZpMY" target="_blank">
+        <div class="card-icon">📄</div>
+        <div>
+          <div class="card-label">Class 1B Performance Report</div>
+          <div class="card-sub">Click to open document ↗</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert-box">
+      <div class="aico">⚠️</div>
+      <p>Participants who completed 100% of the <strong>DBM eLearning Management Competency Program (LMS)</strong> but are marked as incomplete in the <strong>Notion Digital Journal</strong> and have not yet submitted the <strong>Post-Training Evaluation Form</strong> — <u>kindly comply <strong>until March 5, 2026</strong> and notify your respective facilitator upon completion.</u> Strict compliance is required for the release of your <strong>Certificate of Completion</strong>.</p>
+    </div>
+
+    <!-- Congrats -->
+    <div class="congrats">
+      <h2>🎉 Congratulations to all <em>Foundation Track Finishers!</em></h2>
+      <p>We commend the time and effort you invested in this training program to enhance your public financial management competency skills. We hope that you will continue your <strong>Public Financial Management Competency Program (PFMCP)</strong> journey. If you wish to proceed, please be informed of the next steps below.</p>
+    </div>
+
+    <p class="body-p">Kindly refer to the complete details on the <strong>PFMCP</strong> provided below for your guidance.</p>
+    <div class="divider"></div>
+  </div>
+
+  <!-- ====== SECTION I: BRIEFER ====== -->
+  <div class="section-block" id="sec-briefer">
+    <button class="sec-trigger" aria-expanded="true" data-target="panel-briefer">
+      <div class="sec-icon ic-blue">📋</div>
+      <div class="sec-label">
+        <span class="sec-num">Section I</span>
+        <div class="sec-title">PFMCP Briefer</div>
+        <div class="sec-subtitle">About the program and its objectives</div>
+      </div>
+      <div class="chevron">▾</div>
+    </button>
+    <div class="sec-panel open" id="panel-briefer">
+      <div class="sec-body">
+        <p class="body-p">The <strong>Public Financial Management Competency Program (PFMCP)</strong> is designed to enhance the PFM-relevant skills and functions of the Philippine PFM workforce as well as further strengthen the PFM capacity-building program, as part of the <strong>PFM Reform Roadmap</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION II: TRACKS ====== -->
+  <div class="section-block" id="sec-tracks">
+    <button class="sec-trigger" aria-expanded="true" data-target="panel-tracks">
+      <div class="sec-icon ic-yellow">🗂️</div>
+      <div class="sec-label">
+        <span class="sec-num">Section II</span>
+        <div class="sec-title">PFMCP Offered Tracks</div>
+        <div class="sec-subtitle">Foundation, Budgeting &amp; Performance, Internal Audit</div>
+      </div>
+      <div class="chevron">▾</div>
+    </button>
+    <div class="sec-panel open" id="panel-tracks">
+      <div class="sec-body">
+        <ul class="track-list">
+          <li><div class="bullet">1</div><div><strong>Foundation Track (FT)</strong></div></li>
+          <li>
+            <div class="bullet">2</div>
+            <div>
+              <strong>Budgeting and Performance Track (BPT)</strong>
+              <ul class="sub-track">
+                <li>Introduction to Budgeting (ITB) module</li>
+                <li>Fiscal Planning (FP) module</li>
+                <li>Budget Preparation (BP)</li>
+                <li>Budget Execution (BE) module</li>
+                <li>Developments in Budgeting (DB) module</li>
+              </ul>
+            </div>
+          </li>
+          <li><div class="bullet">3</div><div><strong>Internal Audit Track for Non-Internal Audit Practitioners (IAT)</strong></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION III: QUALIFICATIONS ====== -->
+  <div class="section-block" id="sec-qual">
+    <button class="sec-trigger" aria-expanded="false" data-target="panel-qual">
+      <div class="sec-icon ic-green">✅</div>
+      <div class="sec-label">
+        <span class="sec-num">Section III</span>
+        <div class="sec-title">Interested Individuals Qualifications</div>
+        <div class="sec-subtitle">Eligibility criteria for PFMCP enrollment</div>
+      </div>
+      <div class="chevron">▾</div>
+    </button>
+    <div class="sec-panel" id="panel-qual">
+      <div class="sec-body">
+        <ul class="qual-list">
+          <li><span class="qdot">◆</span><span>Personnel with <strong>Salary Grades 11 to 22</strong> (strictly for technical staff only)</span></li>
+          <li><span class="qdot">◆</span><span>Personnel who perform key PFM functions: <strong>Budgeting, Planning, Accounting, Auditing, Procurement, Cash Management</strong></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION IV: TERMS ====== -->
+  <div class="section-block" id="sec-terms">
+    <button class="sec-trigger" aria-expanded="false" data-target="panel-terms">
+      <div class="sec-icon ic-red">📜</div>
+      <div class="sec-label">
+        <span class="sec-num">Section IV</span>
+        <div class="sec-title">Terms &amp; Conditions of Enrollment</div>
+        <div class="sec-subtitle">Rules and requirements for participation</div>
+      </div>
+      <div class="chevron">▾</div>
+    </button>
+    <div class="sec-panel" id="panel-terms">
+      <div class="sec-body">
+        <ol class="terms-list">
+          <li>Foundation Track is a <strong>prerequisite course</strong> before taking any technical tracks (BPT and IAT).</li>
+          <li>Each agency is given a <strong>maximum of 5 slots per BPT cycle</strong>. Enrollment is on a first-come, first-served basis.</li>
+          <li>Participants must be <strong>endorsed by their Bureau/Service/Office Head</strong> or authorized representative.</li>
+          <li>For first-time/new enrollees of BPT, participants are required to finish <strong>one (1) full cycle</strong> under a block section, taking modules in proper sequence.</li>
+          <li>Previous BPT enrollees (2025 and below) are encouraged to finish remaining modules and <strong>may enroll on any available dates</strong>.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION V: ENROLLMENT ====== -->
+  <div class="section-block" id="sec-enroll">
+    <button class="sec-trigger" aria-expanded="false" data-target="panel-enroll">
+      <div class="sec-icon ic-purple">📝</div>
+      <div class="sec-label">
+        <span class="sec-num">Section V</span>
+        <div class="sec-title">Enrollment Process</div>
+        <div class="sec-subtitle">How to register and submit your nomination</div>
+      </div>
+      <div class="chevron">▾</div>
+    </button>
+    <div class="sec-panel" id="panel-enroll">
+      <div class="sec-body">
+        <div class="enroll-card">
+          <p>The partner agency shall express their interest to enroll in the PFMCP through the submission of the <strong>Participant Nomination Form</strong> to: <a href="mailto:bitscdd@dbm.gov.ph" class="email-chip">📧 bitscdd@dbm.gov.ph</a></p>
+          <p style="margin-top:10px;">The form must be <strong>approved and copy furnished to the authorized representative</strong>.</p>
+        </div>
+        <div class="enroll-card">
+          <p><strong>Link to PFMCP Nomination Forms and Course Overview Materials:</strong></p>
+          <p style="margin-top:8px;"><a href="https://dbmgovph-my.sharepoint.com/:f:/g/personal/bitscdd_dbm_gov_ph/IgDw5TMy6NiRRYI-KrpDlKlUAQEPT5jPTTAhI1E4eBbThQ0?e=JN9cQs" target="_blank" style="color:var(--blue);font-weight:700;font-family:'Lato',sans-serif;">📁 2026 PFMCP Enrollment Materials ↗</a></p>
+        </div>
+        <div class="nominee-note">
+          <p>If the nominated participant's salary grade is <strong>below SG Level 11 or above 22</strong>, please justify and address the Training Enrollment Letter to:</p>
+          <p style="margin-top:10px;"><strong>Atty. Diana C. Camacho-Mercado</strong><br/><em>Assistant Secretary and Concurrent Director, ACTS</em><br/>📧 <a href="mailto:bitscdd@dbm.gov.ph" style="color:var(--blue);font-weight:700;">bitscdd@dbm.gov.ph</a></p>
+        </div>
+        <p class="body-p" style="margin-top:14px;">First-time nominees are required to finish the <strong>Foundation Track (FT)</strong> before enrolling in the BPT and IAT. FT finishers enrolling in BPT are expected to <strong>complete all modules</strong> under the track.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECTION VI: SCHEDULE ====== -->
+  <div class="section-block" id="sec-sched">
+    <button class="sec-trigger" aria-expanded="false" data-target="panel-sched">
+      <div class="sec-icon ic-orange">📅</div>
+      <div class="sec-label">
+        <span class="sec-num">Section VI</span>
+        <div class="sec-title">2026 Schedule of Available Training Classes</div>
+        <div class="sec-subtitle">FT · BPT Classes 1–4 · BPT Special · IAT</div>
+      </div>
+      <div class="chevron">▾</div>
+    </button>
+    <div class="sec-panel" id="panel-sched">
+      <div class="sec-body">
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:var(--blue)"></div><h4>Foundation Track (FT)</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Class</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>FT Class 1</td><td>Jan 26 – Feb 24</td><td><span class="mode-badge m-async">Asynchronous</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>FT Class 2</td><td>Jul 6 – Aug 4</td><td><span class="mode-badge m-async">Asynchronous</span></td><td class="fee-free">Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:var(--red)"></div><h4>BPT — Class 2026-1</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Module</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>Introduction to Budgeting</td><td>Feb 11 – 24</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Fiscal Planning</td><td>Mar 17 – 30</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Budget Preparation &amp; Execution</td><td>May 4 – 8</td><td><span class="mode-badge m-f2f">Face-to-Face (UP-NCPAG)</span></td><td class="fee-paid">₱22,500*</td></tr>
+              <tr><td>Developments in Budgeting</td><td>May 25 – 28</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:#e8a000"></div><h4>BPT — Class 2026-2</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Module</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>Introduction to Budgeting</td><td>Apr 15 – 28</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Fiscal Planning</td><td>May 25 – Jun 5</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Budget Preparation &amp; Execution</td><td>Jul 6 – 10</td><td><span class="mode-badge m-f2f">Face-to-Face (UP-NCPAG)</span></td><td class="fee-paid">₱22,500*</td></tr>
+              <tr><td>Developments in Budgeting</td><td>Aug 11 – 14</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:#6a2bbd"></div><h4>BPT — Class 2026-3</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Module</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>Introduction to Budgeting</td><td>Jun 9 – 23</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Fiscal Planning</td><td>Jul 27 – Aug 7</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Budget Preparation &amp; Execution</td><td>Sep 21 – 25</td><td><span class="mode-badge m-f2f">Face-to-Face (UP-NCPAG)</span></td><td class="fee-paid">₱22,500*</td></tr>
+              <tr><td>Developments in Budgeting</td><td>Oct 20 – 23</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:#1a8a4a"></div><h4>BPT — Class 2026-4</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Module</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>Introduction to Budgeting</td><td>Oct 5 – 16</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>Fiscal Planning</td><td>Nov 16 – 27</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:#e87c1e"></div><h4>BPT — Special Class</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Module</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>Budget Preparation &amp; Execution</td><td>Oct 26 – 30</td><td><span class="mode-badge m-f2f">Face-to-Face (UP-NCPAG)</span></td><td class="fee-paid">₱22,500*</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="schedule-group">
+          <div class="sched-group-title"><div class="stripe" style="background:var(--mid-gray)"></div><h4>Internal Audit Track (IAT)</h4></div>
+          <table class="sched-table">
+            <thead><tr><th>Class</th><th>Training Dates</th><th>Mode</th><th>Fee</th></tr></thead>
+            <tbody>
+              <tr><td>IAT Class 2026-1</td><td>Mar 17 – 31</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>IAT Class 2026-2</td><td>May 5 – 19</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>IAT Class 2026-3</td><td>Sep 1 – 15</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+              <tr><td>IAT Class 2026-4</td><td>Nov 4 – 18</td><td><span class="mode-badge m-blend">Blended</span></td><td class="fee-free">Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="font-size:11.5px;color:var(--mid-gray);font-family:'Source Serif 4',serif;font-style:italic;margin-top:4px;">* ₱22,500.00 subject to adjustment</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing-wrap">
+    <div class="closing-quote">"We look forward to your continued engagement to the PFMCP 🙂"</div>
+    <p class="sig-regards">Warmest Regards,</p>
+    <div class="sig-card">
+      <div class="sig-av">RF</div>
+      <div>
+        <div class="sig-name">RAIONELLE N. FRANCISCO (Mr.)</div>
+        <div class="sig-line">Capacity Development Division (CDD)</div>
+        <div class="sig-line">Budget Information and Training Service (BITS)</div>
+        <div class="sig-line sig-em">(formerly Advocacy, Communications, and Training Service (ACTS))</div>
+        <div class="sig-line">Department of Budget and Management</div>
+        <div class="sig-line">General Solano Street, San Miguel, Malacañang, Manila</div>
+        <div class="sig-line">(632) 8657-3300 local 1106</div>
+        <div class="sig-web"><a href="http://www.dbm.gov.ph/" target="_blank">www.dbm.gov.ph</a></div>
+        <div class="sig-verse">Philippians 3:8</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">
+      <strong>PFM Competency Program</strong>
+      Department of Budget and Management
+    </div>
+    <div class="footer-links">
+      <a href="https://www.facebook.com/DBMgovph" target="_blank">Facebook</a>
+      <a href="http://www.dbm.gov.ph/" target="_blank">DBM Website</a>
+      <a href="mailto:bitscdd@dbm.gov.ph">Email CDD</a>
+    </div>
+  </div>
+  <div class="tri-bar"><span></span><span></span><span></span></div>
+
+</div>
+
+<script>
+  // ACCORDION
+  document.querySelectorAll('.sec-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel  = document.getElementById(btn.dataset.target);
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      panel.classList.toggle('open', !isOpen);
+    });
+  });
+
+  // TOC ACTIVE STATE
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sectionIds = ['sec-intro','sec-briefer','sec-tracks','sec-qual','sec-terms','sec-enroll','sec-sched'];
+  const sections   = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+  function setActive() {
+    let active = sections[0];
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) active = s; });
+    tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + active.id));
+  }
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  // OFFSET SCROLL for sticky nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 50, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
